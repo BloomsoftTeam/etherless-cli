@@ -180,17 +180,15 @@ function (yargs) {
         }
         //perchè dopo l'ultimo parametro non voglio la virgola, parametri in formato (param1,param2,param3) senza parentesi
         stringParameters = stringParameters.concat(paramArray[i]);
-        console.log(typeof stringParameters);
         /* ------------------- */
 
-        // contractRun.getString().then(console.log);
         contractRun.sendRunEvent(argv.funcName , stringParameters).then(console.log);
 
         contractRun.on("runResult", (fResult) => {
             console.log("Ricevuto risultato: ");
             console.log(fResult);
+            contractRun.removeAllListeners("runResult");
         } );
-        // contractRun.removeAllListeners("runResult");
 
     } catch(e) {
         console.log(e);
