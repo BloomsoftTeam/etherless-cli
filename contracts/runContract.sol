@@ -4,8 +4,8 @@ contract RunContract {
 
     // address payable ownerAddress;
     // uint basePrice;
-    mapping (string => address payable) public devFun;
-    mapping (string => uint) public funPrices;
+    mapping (string => address payable) private devFun;
+    mapping (string => uint) private funPrices;
 
     event runRequest(address payable fUser, string fName, string fParameters, address payable fDeveloper);
     //Se teniamo la funzione di somma, usiamo uint per mettergli i risultati
@@ -19,9 +19,6 @@ contract RunContract {
         funPrices[fName] = fPrice;
     }
     
-    function getFirstEntry(string memory fName) public view returns(address payable)  {
-        return devFun[fName];
-    }
     
     function getString() public pure returns(string memory) {
         return "Hello";
