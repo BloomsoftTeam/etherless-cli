@@ -4,18 +4,13 @@ contract RunContract {
 
     // address payable ownerAddress;
     // uint basePrice;
-    mapping (string => address payable) public devFun;
-    mapping (string => uint) public funPrices;
+    mapping (string => address payable) private devFun;
+    mapping (string => uint) private funPrices;
 
     event runRequest(address payable fUser, string fName, string fParameters, address payable fDeveloper);
     //Se teniamo la funzione di somma, usiamo uint per mettergli i risultati
     event runResult(address payable rReceiver, string fResult); //, uint remainingEthers);
-
-    // constructor () public{
-    //     ownerAddress = msg.sender;
-    //     //equivale a 0.05 ether
-    //     basePrice = 50000000000000000 wei;
-    // }
+    
     function addDevFun(string memory fName, address payable fDeveloper) public {
         devFun[fName] = fDeveloper;
     }
@@ -24,9 +19,6 @@ contract RunContract {
         funPrices[fName] = fPrice;
     }
     
-    function getFirstEntry(string memory fName) public view returns(address payable)  {
-        return devFun[fName];
-    }
     
     function getString() public pure returns(string memory) {
         return "Hello";
@@ -39,6 +31,7 @@ contract RunContract {
         // ownerAddress.transfer(basePrice);
         //A questo punto si può procedere con la richiesta del run
         address payable dev = devFun[fName];
+        require(msg.value >= funPrices[fName], "Enough ethereum to proceed");
         dev.transfer(funPrices[fName]);
         emit runRequest(msg.sender, fName, fParameters, dev);
     }
