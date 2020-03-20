@@ -169,8 +169,10 @@ function (yargs) {
 .command('run <funcName> [params..]', 'run a function', () => {}, async (argv) => {
     try {
         await ethers.loadWalletFromFS();
-        const contractRun = ethers.createContract("0x6C9a34F5343B15314869b839b1b2e2dC1F8cE016").connect(ethers.userWallet);
+        //const contractRun = ethers.createContract("0x6C9a34F5343B15314869b839b1b2e2dC1F8cE016").connect(ethers.userWallet);//vecchio contratto funzionante
+        const contractRun = ethers.createContract("0x38bB51CaAD409943d4dF3A177674B03262C10F98").connect(ethers.userWallet); //per testare
 
+        let walletUser = ethers.userWallet; 
         /* ----- yargs ------ */
         let stringParameters = "";
         console.log(stringParameters);
@@ -182,15 +184,14 @@ function (yargs) {
         stringParameters = stringParameters.concat(paramArray[i]);
         console.log(typeof stringParameters);
         /* ------------------- */
-
-        // contractRun.getString().then(console.log);
         contractRun.sendRunEvent(argv.funcName , stringParameters).then(console.log);
 
-        contractRun.on("runResult", (fResult) => {
+        //Capire come usare il wallet dell'user nel ritorno
+        contractRun.on("runResult", (walletUser, fResult) => {
             console.log("Ricevuto risultato: ");
             console.log(fResult);
         } );
-        // contractRun.removeAllListeners("runResult");
+        //contractRun.removeAllListeners("runResult");
 
     } catch(e) {
         console.log(e);
