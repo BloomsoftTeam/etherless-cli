@@ -4,8 +4,8 @@ contract RunContract {
 
     // address payable ownerAddress;
     // uint basePrice;
-    mapping (string => address payable) private devFun;
-    mapping (string => uint) private funPrices;
+    mapping (string => address payable) public devFun;
+    mapping (string => uint) public funPrices;
 
     event runRequest(address payable fUser, string fName, string fParameters, address payable fDeveloper);
     //Se teniamo la funzione di somma, usiamo uint per mettergli i risultati
@@ -16,11 +16,23 @@ contract RunContract {
     //     //equivale a 0.05 ether
     //     basePrice = 50000000000000000 wei;
     // }
+    function addDevFun(string memory fName, address payable fDeveloper) public {
+        devFun[fName] = fDeveloper;
+    }
+    
+    function addFunPrice(string memory fName, uint fPrice) public {
+        funPrices[fName] = fPrice;
+    }
+    
+    function getFirstEntry(string memory fName) public view returns(address payable)  {
+        return devFun[fName];
+    }
+    
     function getString() public pure returns(string memory) {
         return "Hello";
     }
 
-    function sendRunEvent(string memory fName, string memory fParameters) public{ 
+    function sendRunEvent(string memory fName, string memory fParameters) public payable { 
         //Richiesta minima di basePrice sul wallet per eseguire l'operazione
         // require(ownerAddress.balance >= basePrice);
         //Trasferisce al contratto gli eth di basePrice dal wallet
@@ -31,8 +43,7 @@ contract RunContract {
         emit runRequest(msg.sender, fName, fParameters, dev);
     }
 
-    function sendRunResult(address payable rReceiver, string memory fResult, uint moneyLeft) //, uint runCost) payable 
-    public{
+    function sendRunResult(address payable rReceiver, string memory fResult, uint moneyLeft) public payable {
         //Calcola il resto
         // uint remainingEthers = basePrice - runCost;
         //Riassegna il resto al wallet che ha inviato la richiesta
