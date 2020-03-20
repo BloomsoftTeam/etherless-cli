@@ -4,8 +4,8 @@ contract RunContract {
 
     // address payable ownerAddress;
     // uint basePrice;
-    mapping (string => address payable) private dev-fun;
-    mapping (string => uint) private fun-prices;
+    mapping (string => address payable) private devFun;
+    mapping (string => uint) private funPrices;
 
     event runRequest(address payable fUser, string fName, string fParameters, address payable fDeveloper);
     //Se teniamo la funzione di somma, usiamo uint per mettergli i risultati
@@ -20,17 +20,18 @@ contract RunContract {
         return "Hello";
     }
 
-    function sendRunEvent(string memory fName, string memory fParameters, ) public{ 
+    function sendRunEvent(string memory fName, string memory fParameters) public{ 
         //Richiesta minima di basePrice sul wallet per eseguire l'operazione
         // require(ownerAddress.balance >= basePrice);
         //Trasferisce al contratto gli eth di basePrice dal wallet
         // ownerAddress.transfer(basePrice);
         //A questo punto si può procedere con la richiesta del run
-        dev-fun[fName].transfer(fun-prices[fName]);
-        emit runRequest(msg.sender, fName, fParameters, dev-fun[fName]);
+        address payable dev = devFun[fName];
+        dev.transfer(funPrices[fName]);
+        emit runRequest(msg.sender, fName, fParameters, dev);
     }
 
-    function sendRunResult(address payable rReceiver, string fResult, uint moneyLeft) //, uint runCost) payable 
+    function sendRunResult(address payable rReceiver, string memory fResult, uint moneyLeft) //, uint runCost) payable 
     public{
         //Calcola il resto
         // uint remainingEthers = basePrice - runCost;
