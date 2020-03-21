@@ -189,7 +189,7 @@ function (yargs) {
         console.log(JSON.stringify(paramJSON));
         //let myJSON = JSON.parse(paramJSON);
         //console.log(myJSON);
-        /*for(var i = 0; i<(paramArray.length -1); i++){
+        for(var i = 0; i<(paramArray.length -1); i++){
             stringParameters = stringParameters.concat(paramArray[i] + ",");
         }
         //perchè dopo l'ultimo parametro non voglio la virgola, parametri in formato (param1,param2,param3) senza parentesi
