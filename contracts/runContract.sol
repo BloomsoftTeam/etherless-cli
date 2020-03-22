@@ -1,4 +1,4 @@
-pragma solidity ^0.5.16;
+pragma solidity 0.5.16;
 
 import "contractsInterface.sol";
 
@@ -24,12 +24,6 @@ contract RunContract is ContractsInterface{
     
     function getString() public pure returns(string memory) {
         return "Hello";
-    }
-
-   function setValue(string memory fName, string memory fParameters) public payable {
-       uint price = funPrices[fName]; 
-       require(msg.sender.balance >= price);
-       RunContract.emitRunEvent.value(price)(fName, fParameters);
     }
 
     function emitRunEvent(string memory fName, string memory fParameters) public payable { 
