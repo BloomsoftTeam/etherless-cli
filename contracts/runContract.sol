@@ -9,6 +9,12 @@ contract RunContract is ContractsInterface{
     //mapping (string => address payable) private devFun;
     //mapping (string => uint) private funPrices;
 
+    address payable private user;
+
+    constructor() {
+        user = msg.sender;
+    }
+
     event runRequest(address payable fUser, string fName, string fParameters, address payable fDeveloper);
     //Se teniamo la funzione di somma, usiamo uint per mettergli i risultati
     event runResult(address payable rReceiver, string fResult); //, uint remainingEthers);
@@ -38,7 +44,7 @@ contract RunContract is ContractsInterface{
         emit runRequest(msg.sender, fName, fParameters, dev);
     }
 
-    function sendRunResult(address payable rReceiver, string memory fResult, uint moneyLeft) public payable {
+    function sendRunResult(string memory fResult, uint moneyLeft) public payable {
         //Calcola il resto
         // uint remainingEthers = basePrice - runCost;
         //Riassegna il resto al wallet che ha inviato la richiesta
@@ -48,7 +54,7 @@ contract RunContract is ContractsInterface{
         
 
         //Manda l'evento alla cli con risultato e resto di cui fare il console log
-        rReceiver.transfer(moneyLeft);
+        user.transfer(moneyLeft);
         emit runResult(rReceiver, fResult); //, remainingEthers);
     }
 }
