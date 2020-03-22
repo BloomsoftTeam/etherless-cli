@@ -15,7 +15,7 @@ contract ContractsInterface {
     }
 
     function addFunHidden(string memory fName, bool h) public {
-        funPrices[fName] = h;
+        funHidden[fName] = h;
     }
 
     function changeHidden(string memory fName) public {
