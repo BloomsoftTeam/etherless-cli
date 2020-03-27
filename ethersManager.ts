@@ -8,9 +8,7 @@ import { InfuraProvider } from 'ethers/providers';
 import * as contractManager from './contractManager';
 import { KeyManager } from './keyManager';
 
-import dotenv = require('dotenv');
-
-dotenv.config();
+require('dotenv').config();
 
 export class EthersManager {
   readonly provider: InfuraProvider;
