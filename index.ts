@@ -8,7 +8,6 @@ import boxen from 'boxen';
 
 import { EthersManager } from './ethersManager';
 import { KeyManager } from './keyManager';
-import { ethers } from 'ethers/dist/types';
 
 const keyManager = new KeyManager('hdtedx');
 const ethersManager = new EthersManager(keyManager);
