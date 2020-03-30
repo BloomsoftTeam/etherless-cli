@@ -1,0 +1,3 @@
+[submodule "etherless-common"]
+	path = etherless-common
+	url = https://github.com/BloomsoftTeam/etherless-common
