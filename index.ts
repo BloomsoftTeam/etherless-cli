@@ -6,11 +6,9 @@ import * as readline from 'readline';
 import chalk from 'chalk';
 import boxen from 'boxen';
 
-import { EthersManager } from './ethersManager';
-import { KeyManager } from './keyManager';
+import { EtherlessManager } from './etherlessManager';
 
-const keyManager = new KeyManager('hdtedx');
-const ethersManager = new EthersManager(keyManager);
+const etherlessManager = new EtherlessManager();
 
 const msgInit = chalk.white.bold('Welcome in Etherless! Lets you associate an ETH wallet to Etherless!');
 
@@ -34,7 +32,7 @@ yargs
         case 'l':
         case 'link':
           rl.question('Insert your eth wallet private key: \n', (answer2) => {
-            if (ethersManager.linkEthWallet(answer2)) {
+            if (etherlessManager.linkEthWallet(answer2)) {
               console.log('wallet ETH associato correttamente');
             } else {
               console.log('Errore nell\'associazione della chiave privata al wallet ETH (magari la chiave inserita non è corretta?)');
@@ -44,12 +42,12 @@ yargs
           break;
         case 'c':
         case 'create':
-          if (ethersManager.checkEthWalletExistance()) {
+          if (etherlessManager.checkEthWalletExistance()) {
             rl.question('An ETH Wallet is already associated. Do you want to delete it and create a new one? [Yes/no] ', (answer2) => {
               switch (answer2.toLowerCase()) {
                 case 'y':
                 case 'yes':
-                  const myNewWallet = ethersManager.createNewEthWallet();
+                  const myNewWallet = etherlessManager.createNewEthWallet();
                   console.log('A new ethereum wallet is now ready for you!');
                   console.log('Take notes of your newly generated mnemonic so that you can recover your credentials in the future');
                   console.log(`Mnemonic: ${myNewWallet.mnemonic}`);
@@ -66,7 +64,7 @@ yargs
             });
           } else {
             rl.close();
-            const myNewWallet = ethersManager.createNewEthWallet();
+            const myNewWallet = etherlessManager.createNewEthWallet();
             console.log('A new ethereum wallet is now ready for you!');
             console.log('Take notes of your newly generated mnemonic so that you can recover your credentials in the future');
             console.log(`Mnemonic: ${myNewWallet.mnemonic}`);
@@ -80,7 +78,7 @@ yargs
     });
   })
   .command('logout', 'lets you remove your ETH wallet from etherless', () => { }, (argv) => {
-    if (ethersManager.removeWalletFromFS()) {
+    if (etherlessManager.removeWalletFromFS()) {
       console.log('wallet rimosso con successo');
     } else {
       console.log('non è stato trovato nessun wallet');
@@ -133,9 +131,9 @@ yargs
     })
   .command('deploy <funcName>', 'upload a javascript function to etherless', () => {}, async (argv) => {
     try {
-      await ethersManager.loadWalletFromFS();
-      const deployContract = await ethersManager.loadSmartContract(process.env.DEPLOY_CONTRACT_ADDRESS);
-      const signedContract = deployContract.connect(ethersManager.userWallet);
+      await etherlessManager.loadWalletFromFS();
+      const deployContract = await etherlessManager.loadSmartContract(process.env.DEPLOY_CONTRACT_ADDRESS);
+      const signedContract = deployContract.connect(etherlessManager.userWallet);
       
       signedContract.deploy("1234567890", "addo", { value: 2*(10**15), }).then(console.log);
     } catch(e) {
@@ -145,12 +143,12 @@ yargs
   })
   .command('run <funcName> [params..]', 'run a function', () => {}, async (argv) => {
     try {
-        await ethersManager.loadWalletFromFS();
+        await etherlessManager.loadWalletFromFS();
         //const contractRun = ethersManager.createContract("0x6C9a34F5343B15314869b839b1b2e2dC1F8cE016").connect(ethersManager.userWallet);//vecchio contratto funzionante
         // contractRun.connect(ethersManager.userWallet);
         // ethersManager.createContract("0x38bB51CaAD409943d4dF3A177674B03262C10F98").connect(ethersManager.userWallet); //per testare
 
-        let walletUser = ethersManager.userWallet; 
+        let walletUser = etherlessManager.userWallet; 
         /* ----- yargs ------ */
         let stringParameters = "";
         console.log(stringParameters);
@@ -173,9 +171,9 @@ yargs
         stringParameters = stringParameters.concat(paramArray[i]);
         /* ------------------- */
 
-        await ethersManager.loadSmartContract("0x38bB51CaAD409943d4dF3A177674B03262C10F98")
+        await etherlessManager.loadSmartContract("0x38bB51CaAD409943d4dF3A177674B03262C10F98")
         .then( (contractRun) => {
-            contractRun = contractRun.connect(ethersManager.userWallet);
+            contractRun = contractRun.connect(etherlessManager.userWallet);
 
             contractRun.sendRunEvent(argv.funcName , stringParameters).then(console.log).catch(console.log);
 
@@ -193,8 +191,8 @@ yargs
   })
   .command('deployFunc <funcName>', 'deploya una funzione su etherless che verrà beccata dal webhook', () => {}, async (argv) => {
     try {
-      await ethersManager.loadWalletFromFS();
-      await ethersManager.deployFunc(argv.funcName);
+      await etherlessManager.loadWalletFromFS();
+      await etherlessManager.deployFunc(argv.funcName);
     } catch (e) {
       console.log(e);
     }
