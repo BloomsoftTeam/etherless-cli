@@ -87,7 +87,7 @@ export class EtherlessManager {
     }
   }
 
-  deployFunc(funcName: string) {
+  C {
     this.ethersManager.loadSmartContract('0x59Acf9e0e4fAdE6b845810d02C27e6eFEfDd7eA4')
     .then((deployContract) => {
       const deployContractSigned = deployContract.connect(this.userWallet);
