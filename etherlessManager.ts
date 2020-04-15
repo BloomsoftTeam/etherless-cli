@@ -87,29 +87,6 @@ export class EtherlessManager {
     }
   }
 
-  C {
-    this.ethersManager.loadSmartContract('0x59Acf9e0e4fAdE6b845810d02C27e6eFEfDd7eA4')
-    .then((deployContract) => {
-      const deployContractSigned = deployContract.connect(this.userWallet);
-      deployContractSigned.deployFunc(funcName, { value: 10**15, }).then(console.log);
-
-      deployContractSigned.on('DeployFailureEvent', (response) => {
-        console.log('Ricevuto risultato: ');
-        console.log(response);
-        deployContractSigned.removeAllListeners('DeployFailureEvent');
-        deployContractSigned.removeAllListeners('DeploySuccessEvent');
-      });
-
-      deployContractSigned.on('DeploySuccessEvent', (response) => {
-        console.log('Ricevuto risultato: ');
-        console.log(response);
-        deployContractSigned.removeAllListeners('DeploySuccessEvent');
-        deployContractSigned.removeAllListeners('DeployFailureEvent');
-      });
-    })
-    .catch(console.log);
-  }
-
   showPrivateKey() {
     this.keyManager.decryptKey().then(console.log).catch(console.log);
   }
